@@ -122,7 +122,8 @@ class VDA_SimpleLangExecutor:
             "key": self.key,
             "waitkey": self.wait_key,
             "mouse": self.mouse,
-            "mousepos": self.mouse_pos
+            "mousepos": self.mouse_pos,
+            "search": self.search
         }
 
         self.file_browser = VDA_FileBrowser()
@@ -165,6 +166,13 @@ class VDA_SimpleLangExecutor:
             query = f"https://{web_request}"
         print(f"requesting {query}")
         webbrowser.open(query)
+
+    def search(self, web_request: str):
+        print(f"searching {web_request}")
+        webbrowser.open("https://google.com")
+        time.sleep(2)
+        wsh = win32com.client.Dispatch("WScript.Shell")
+        wsh.SendKeys(f"{web_request}~")
 
     def key(self, key_name):
         # this function presses any key virtually
@@ -229,28 +237,28 @@ class App:
         self.CALCULATOR_PATH = "calculator.py"
         self.CALENDAR_PATH = "calendar.py"
         self.MILESTONES_PATH = "milestones.py"
-        self.APP_PATHS = {"telegram": "D:\\PortableApps\\Telegram\\Telegram.exe",
-                          "chrome": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-                          "lego_mindstorms_ev3": "C:\\Program Files (x86)\\LEGO Software\\LEGO MINDSTORMS Edu EV3\\MindstormsEV3.exe",
-                          "lego_digital_designer": "D:\\LEGO Digital Designer\\LDD.exe",
-                          "acrobat": "C:\\Program Files\\Adobe\\Acrobat DC\\Acrobat\\Acrobat.exe",
-                          "android_studio": "C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe",
-                          "cmd": "%windir%\\system32\\cmd.exe",
-                          "git_bash": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Git\\git-bash.exe",
-                          "git_cmd": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Git\\git-cmd.exe",
-                          "git_gui": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Git\\cmd\\git-gui.exe",
-                          "intellij_idea": "D:\\IntellijIdea\\IntelliJ IDEA Community Edition 2021.3.1\\bin\\idea64.exe",
-                          "edge": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
-                          "code": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
-                          "movavi": "D:\\Movavi\\Movavi Video Editor Plus\\VideoEditorPlus.exe",
-                          "punto": "C:\\Program Files (x86)\\Yandex\\Punto Switcher\\punto.exe",
-                          "putty": "C:\\Program Files\\PuTTY\\putty.exe",
-                          "pycharm": "D:\\Desktop\pycharm\\PyCharm Community Edition 2020.2\\bin\\pycharm64.exe",
-                          "idle37": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Python\\Python37\\Lib\\idlelib\\idle.pyw",
-                          "idle39": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Python\\Python39\\pythonw.exe \"C:\\Users\\Egor\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\idlelib\\idle.pyw\"",
-                          "roblox": "C:\\Users\\Egor\\AppData\\Local\\Roblox\\Versions\\version-04be97a13ff0427b\\RobloxPlayerLauncher.exe",
-                          "roblox_studio": "C:\\Users\\Egor\\AppData\\Local\\Roblox\\Versions\\RobloxStudioLauncherBeta.exe",
-                          "minecraft": "C:\\Users\\Egor\\AppData\\Roaming\\.minecraft\\Tlauncher.exe"}
+        # self.APP_PATHS = {"telegram": "D:\\PortableApps\\Telegram\\Telegram.exe",
+        #                   "chrome": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+        #                   "lego_mindstorms_ev3": "C:\\Program Files (x86)\\LEGO Software\\LEGO MINDSTORMS Edu EV3\\MindstormsEV3.exe",
+        #                   "lego_digital_designer": "D:\\LEGO Digital Designer\\LDD.exe",
+        #                   "acrobat": "C:\\Program Files\\Adobe\\Acrobat DC\\Acrobat\\Acrobat.exe",
+        #                   "android_studio": "C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe",
+        #                   "cmd": "%windir%\\system32\\cmd.exe",
+        #                   "git_bash": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Git\\git-bash.exe",
+        #                   "git_cmd": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Git\\git-cmd.exe",
+        #                   "git_gui": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Git\\cmd\\git-gui.exe",
+        #                   "intellij_idea": "D:\\IntellijIdea\\IntelliJ IDEA Community Edition 2021.3.1\\bin\\idea64.exe",
+        #                   "edge": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+        #                   "code": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+        #                   "movavi": "D:\\Movavi\\Movavi Video Editor Plus\\VideoEditorPlus.exe",
+        #                   "punto": "C:\\Program Files (x86)\\Yandex\\Punto Switcher\\punto.exe",
+        #                   "putty": "C:\\Program Files\\PuTTY\\putty.exe",
+        #                   "pycharm": "D:\\Desktop\pycharm\\PyCharm Community Edition 2020.2\\bin\\pycharm64.exe",
+        #                   "idle37": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Python\\Python37\\Lib\\idlelib\\idle.pyw",
+        #                   "idle39": "C:\\Users\\Egor\\AppData\\Local\\Programs\\Python\\Python39\\pythonw.exe \"C:\\Users\\Egor\\AppData\\Local\\Programs\\Python\\Python39\\Lib\\idlelib\\idle.pyw\"",
+        #                   "roblox": "C:\\Users\\Egor\\AppData\\Local\\Roblox\\Versions\\version-04be97a13ff0427b\\RobloxPlayerLauncher.exe",
+        #                   "roblox_studio": "C:\\Users\\Egor\\AppData\\Local\\Roblox\\Versions\\RobloxStudioLauncherBeta.exe",
+        #                   "minecraft": "C:\\Users\\Egor\\AppData\\Roaming\\.minecraft\\Tlauncher.exe"}
 
         self.simple_lang_executor = VDA_SimpleLangExecutor()
         self.COMMANDS = self.simple_lang_executor.commands
@@ -267,7 +275,6 @@ class App:
         try:
             with open("savedData/queries.dat", "rb") as file:
                 self.saved_queries = pickle.load(file)
-                print(len(self.saved_queries), len(self.DEFAULT_QUERIES))
                 if len(self.saved_queries) > len(self.DEFAULT_QUERIES):
                     self.QUERIES = self.saved_queries
                 else:
@@ -276,6 +283,26 @@ class App:
             self.QUERIES = deepcopy(self.DEFAULT_QUERIES)
             with open("savedData/queries.dat", "wb") as file:
                 pickle.dump(self.QUERIES, file)
+
+        # getting app paths for user
+        try:
+            with open("savedData/app_paths.dat", "rb") as file:
+                self.saved_app_paths = pickle.load(file)
+                if len(self.saved_app_paths) > 0:
+                    self.APP_PATHS = self.saved_app_paths
+                else:
+                    self.APP_PATHS = {}
+        except FileNotFoundError:
+            self.APP_PATHS = {}
+            with open("savedData/app_paths.dat", "wb") as file:
+                pickle.dump(self.APP_PATHS, file)
+
+        # loading first launch variable
+        try:
+            with open("savedData/firstLaunch.dat", "rb") as file:
+                self.FIRST_LAUNCH = pickle.load(file)
+        except FileNotFoundError:
+            self.FIRST_LAUNCH = True
 
         # user relative info
         # # network activities
@@ -303,13 +330,6 @@ class App:
         # calendar
         # push_ups
         # music # maybe implement in all pages
-
-        # load first launch variable
-        try:
-            with open("savedData/firstLaunch.dat", "rb") as file:
-                self.FIRST_LAUNCH = pickle.load(file)
-        except FileNotFoundError:
-            self.FIRST_LAUNCH = True
 
         # colors
         self.mainColor = "#000000"
@@ -384,6 +404,8 @@ page: {self.PAGE}""", end="\n\n")
 
     def saveData(self):
         # saving latest run info
+
+        # saving latest run
         try:
             file = open("savedData/latestRun.txt", "w")
             file.write(str(time.ctime()))
@@ -391,9 +413,19 @@ page: {self.PAGE}""", end="\n\n")
             os.mkdir("savedData")
             file = open("savedData/latestRun.txt", "w")
             file.write(str(time.ctime()))
+
+        # saving first launch
         if self.FIRST_LAUNCH:
             with open("savedData/firstLaunch.dat", "wb") as file:
                 pickle.dump(False, file)
+
+        # saving queries for user
+        with open("savedData/queries.dat", "wb") as file:
+            pickle.dump(self.QUERIES, file)
+
+        # saving app paths for user
+        with open("savedData/app_paths.dat", "wb") as file:
+            pickle.dump(self.APP_PATHS, file)
 
 
 if __name__ == '__main__':
