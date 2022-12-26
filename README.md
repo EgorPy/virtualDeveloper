@@ -1,4 +1,4 @@
-# virtualDeveloper
+# Virtual Developer
 
 __author__ = Egor Mironov @ved3v
 
